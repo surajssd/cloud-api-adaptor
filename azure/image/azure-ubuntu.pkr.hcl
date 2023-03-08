@@ -8,11 +8,19 @@ source "azure-arm" "ubuntu" {
   location                          = "${var.location}"
   os_type                           = "Linux"
   image_publisher                   = "Canonical"
-  image_offer                       = "0001-com-ubuntu-minimal-jammy"
-  image_sku                         = "minimal-22_04-lts"
+  image_offer                       = "0001-com-ubuntu-confidential-vm-jammy"
+  image_sku                         = "22_04-lts-cvm"
   managed_image_name                = "${var.az_image_name}"
   managed_image_resource_group_name = "${var.resource_group}"
 
+  shared_image_gallery_destination {
+      subscription = "${var.subscription_id}"
+      resource_group = "${var.resource_group}"
+      gallery_name = "caaubntcvmsGallery"
+      image_name = "cc-image"
+      image_version = "0.0.2"
+      storage_account_type = "Standard_LRS"
+  }
 }
 
 build {

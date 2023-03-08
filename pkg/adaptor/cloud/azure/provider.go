@@ -196,6 +196,9 @@ func (p *azureProvider) CreateInstance(ctx context.Context, podName, sandboxID s
 					Caching:      to.Ptr(armcompute.CachingTypesReadWrite),
 					ManagedDisk: &armcompute.ManagedDiskParameters{
 						StorageAccountType: to.Ptr(armcompute.StorageAccountTypesStandardLRS),
+						SecurityProfile: &armcompute.VMDiskSecurityProfile{
+							SecurityEncryptionType: to.Ptr(armcompute.SecurityEncryptionTypesVMGuestStateOnly),
+						},
 					},
 				},
 			},
@@ -217,6 +220,13 @@ func (p *azureProvider) CreateInstance(ctx context.Context, podName, sandboxID s
 			NetworkProfile: &armcompute.NetworkProfile{
 				NetworkInterfaces: []*armcompute.NetworkInterfaceReference{
 					{ID: vmNIC.ID},
+				},
+			},
+			SecurityProfile: &armcompute.SecurityProfile{
+				SecurityType: to.Ptr(armcompute.SecurityTypesConfidentialVM),
+				UefiSettings: &armcompute.UefiSettings{
+					SecureBootEnabled: to.Ptr(true),
+					VTpmEnabled:       to.Ptr(true),
 				},
 			},
 		},
