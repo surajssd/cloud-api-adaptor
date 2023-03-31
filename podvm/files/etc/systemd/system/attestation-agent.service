@@ -1,0 +1,11 @@
+[Unit]
+Description=Attestation Agent Service
+After=network.target kata-agent.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ip netns exec podns /usr/local/bin/attestation-agent --keyprovider_sock 127.0.0.1:60000 --getresource_sock 127.0.0.1:60001
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
