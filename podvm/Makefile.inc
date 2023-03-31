@@ -10,7 +10,7 @@
 UBUNTU_RELEASE     = focal
 SKOPEO_VERSION     = 1.5.0
 UMOCI_VERSION      = 0.4.7
-AA_VERSION         = v0.4.0
+AA_VERSION         = mkulke/add-az-snp-vtpm-attester
 
 IMAGE_PREFIX := podvm
 
@@ -87,7 +87,7 @@ STATIC_LIBSECCOMP_DIR     = $(abspath staticlib)
 STATIC_LIBSECCOMP         = $(STATIC_LIBSECCOMP_DIR)/kata-libseccomp/lib/libseccomp.a
 
 ATTESTATION_AGENT_SRC = ../../../attestation-agent
-ATTESTATION_AGENT_REPO = https://github.com/confidential-containers/attestation-agent
+ATTESTATION_AGENT_REPO = https://github.com/mkulke/attestation-agent
 
 binaries: $(BINARIES)
 
@@ -126,7 +126,8 @@ $(ATTESTATION_AGENT_SRC):
 	git clone -b "$(AA_VERSION)" "$(ATTESTATION_AGENT_REPO)" "$(ATTESTATION_AGENT_SRC)"
 
 $(ATTESTATION_AGENT): $(ATTESTATION_AGENT_SRC)
-	cd "$(ATTESTATION_AGENT_SRC)" && CC= ARCH=$(ARCH) $(MAKE) KBC="$(AA_KBC)" LIBC="$(LIBC)"
+	cd "$(ATTESTATION_AGENT_SRC)" && CC= ARCH=$(ARCH) PKG_CONFIG_SYSROOT_DIR=/ \
+		$(MAKE) LIBC="$(LIBC)" features=rust-crypto,grpc,cc_kbc_az_snp_vtpm
 	mkdir -p "$(@D)"
 	install --compare "$(ATTESTATION_AGENT_SRC)/app/target/$(RUST_TARGET)/release/attestation-agent" "$@"
 
