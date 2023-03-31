@@ -50,6 +50,15 @@ build {
   }
 
   provisioner "shell" {
+    inline = [
+      "sudo apt-get update -y && sudo apt-get install -y tpm2-tools",
+      "sudo apt-get remove unattended-upgrades -y",
+      "sudo apt autoremove -y --purge snapd",
+      "sudo apt-get clean",
+    ]
+  }
+
+  provisioner "shell" {
     execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     inline = [
       "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
