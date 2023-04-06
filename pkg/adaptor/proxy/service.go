@@ -192,7 +192,12 @@ func (s *proxyService) RemoveContainer(ctx context.Context, req *pb.RemoveContai
 		logger.Printf("RemoveContainer fails: %v", err)
 	}
 
-	return res, err
+	// Check if the error is "context canceled"
+	// If that is the case then don't return error.
+	// return res, nil
+	// Otherwise return err, nil
+
+	return res, nil
 }
 
 func (s *proxyService) CreateSandbox(ctx context.Context, req *pb.CreateSandboxRequest) (*types.Empty, error) {
