@@ -247,9 +247,6 @@ func (p *agentProxy) Ready() chan struct{} {
 }
 
 func (p *agentProxy) Shutdown() error {
-	logger.Printf("not shutting down socket forwarder")
-	return nil
-
 	logger.Printf("shutting down socket forwarder")
 	p.stopOnce.Do(func() {
 		close(p.stopCh)
