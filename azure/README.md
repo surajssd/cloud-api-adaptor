@@ -86,6 +86,8 @@ az sig image-definition create \
 
 ## Build Pod VM Image
 
+### Build Ubuntu Image Using Local Dependencies
+
 - Install packer by following [these instructions](https://learn.hashicorp.com/tutorials/packer/get-started-install-cli).
 
 > **NOTE**: For setting up authenticated registry support read this [documentation](../docs/registries-authentication.md).
@@ -112,15 +114,10 @@ export CLOUD_PROVIDER=azure
 PODVM_DISTRO=ubuntu make image && cd -
 ```
 
-Use the `ManagedImageSharedImageGalleryId` field from output of the above command to populate the following environment variable it will be used while deploying the cloud-api-adaptor:
+### Build CentOS/RHEL Image Using Docker
 
-```bash
-# e.g. format: /subscriptions/.../resourceGroups/.../providers/Microsoft.Compute/galleries/.../images/.../versions/..
-export AZURE_IMAGE_ID="REPLACE_ME"
-```
+You can also build the image using docker:
 
-
-You can also build the image using docker
 ```bash
 cd image
 docker build -t azure \
@@ -133,24 +130,29 @@ docker build -t azure \
 -f Dockerfile .
 ```
 
-If you want to use a different base image, then you'll need to provide additional build-args:
-`PUBLISHER`, `OFFER`, `SKU`
+> **NOTE**: If you want to use a different base image, then you'll need to provide additional build arguments viz: `PUBLISHER`, `OFFER`, `SKU`.
 
-Sometimes using the marketplace image requires accepting a licensing agreement and also using a published plan.
-Following [link](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage) provides more detail.
+Sometimes using the marketplace image requires accepting a licensing agreement and also using a published plan. Following [link](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage) provides more detail. For example using the CentOS 8.5 image from eurolinux publisher requires a plan and license agreement. You'll need to first get the URN:
 
-For example using the CentOS 8.5 image from eurolinux publisher requires a plan and license agreement.
-You'll need to first get the URN:
+```bash
+az vm image list \
+  --location $AZURE_REGION \
+  --publisher eurolinuxspzoo1620639373013 \
+  --offer centos-8-5-free \
+  --sku centos-8-5-free \
+  --all --output table
 ```
-az vm image list --location $AZURE_REGION --publisher eurolinuxspzoo1620639373013  --offer centos-8-5-free --sku centos-8-5-free --all --output table
-```
+
 Then you'll need to accept the agreement:
-```
-az vm image terms accept --urn eurolinuxspzoo1620639373013:centos-8-5-free:centos-8-5-free:8.5.5
+
+```bash
+az vm image terms accept \
+  --urn eurolinuxspzoo1620639373013:centos-8-5-free:centos-8-5-free:8.5.5
 ```
 
 Then you can use the following command line to build the image:
-```
+
+```bash
 docker build -t azure \
 --secret id=AZURE_CLIENT_ID \
 --secret id=AZURE_CLIENT_SECRET \
@@ -170,7 +172,7 @@ docker build -t azure \
 
 Here is another example of building RHEL based image:
 
-```
+```bash
 docker build -t azure \
 --secret id=AZURE_CLIENT_ID \
 --secret id=AZURE_CLIENT_SECRET \
@@ -183,6 +185,15 @@ docker build -t azure \
 --build-arg OFFER=RHEL \
 --build-arg PODVM_DISTRO=rhel \
 -f Dockerfile .
+```
+
+### Note Image ID
+
+Use the `ManagedImageSharedImageGalleryId` field from output of the above command to populate the following environment variable it will be used while deploying the cloud-api-adaptor:
+
+```bash
+# e.g. format: /subscriptions/.../resourceGroups/.../providers/Microsoft.Compute/galleries/.../images/.../versions/..
+export AZURE_IMAGE_ID="REPLACE_ME"
 ```
 
 ## Deploy Kubernetes using AKS
