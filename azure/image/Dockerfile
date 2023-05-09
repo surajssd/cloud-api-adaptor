@@ -91,5 +91,6 @@ RUN --mount=type=secret,id=AZURE_SUBSCRIPTION_ID \
     export PKR_VAR_plan_name=${PLAN_NAME} && \
     export PKR_VAR_plan_product=${PLAN_PRODUCT} && \
     export PKR_VAR_plan_publisher=${PLAN_PUBLISHER} && \
+    export CLOUD_PROVIDER=azure && \
     cd cloud-api-adaptor/azure/image && \
-    BINARIES= PAUSE_BUNDLE= CLOUD_PROVIDER=azure PODVM_DISTRO=$PODVM_DISTRO make image
+    BINARIES= PAUSE_BUNDLE= PODVM_DISTRO=$PODVM_DISTRO make image

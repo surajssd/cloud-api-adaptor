@@ -88,21 +88,7 @@ az sig image-definition create \
 
 ### Build Ubuntu Image Using Local Dependencies
 
-- Install packer by following [these instructions](https://learn.hashicorp.com/tutorials/packer/get-started-install-cli).
-
-> **NOTE**: For setting up authenticated registry support read this [documentation](../docs/registries-authentication.md).
-
-- Create a custom Azure VM image based on Ubuntu 22.04 having kata-agent, agent-protocol-forwarder and other dependencies.
-
 ```bash
-cd image
-export PKR_VAR_resource_group="${AZURE_RESOURCE_GROUP}"
-export PKR_VAR_location="${AZURE_REGION}"
-export PKR_VAR_subscription_id="${AZURE_SUBSCRIPTION_ID}"
-export PKR_VAR_client_id="${AZURE_CLIENT_ID}"
-export PKR_VAR_client_secret="${AZURE_CLIENT_SECRET}"
-export PKR_VAR_tenant_id="${AZURE_TENANT_ID}"
-
 # Optional
 # export PKR_VAR_az_image_name="REPLACE_ME"
 # export PKR_VAR_vm_size="REPLACE_ME"
@@ -114,9 +100,11 @@ export CLOUD_PROVIDER=azure
 PODVM_DISTRO=ubuntu make image && cd -
 ```
 
-### Build CentOS/RHEL Image Using Docker
+### Build Ubuntu Image Using Docker
 
-You can also build the image using docker:
+> **NOTE**: For setting up authenticated registry support read this [documentation](../docs/registries-authentication.md).
+
+Create a custom Azure VM image based on Ubuntu 22.04 having kata-agent, agent-protocol-forwarder and other dependencies:
 
 ```bash
 cd image
@@ -129,6 +117,8 @@ docker build -t azure \
 --build-arg AZURE_RESOURCE_GROUP=${AZURE_RESOURCE_GROUP} \
 -f Dockerfile .
 ```
+
+### Build CentOS/RHEL Image Using Docker
 
 > **NOTE**: If you want to use a different base image, then you'll need to provide additional build arguments viz: `PUBLISHER`, `OFFER`, `SKU`.
 
