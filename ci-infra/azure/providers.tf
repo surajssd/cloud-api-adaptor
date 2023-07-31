@@ -9,8 +9,8 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "caa-azure-state"
-    storage_account_name = "caaterraformstate"
+    resource_group_name  = "test-ci-setup"
+    storage_account_name = "caatestterraformstate"
     container_name       = "terraform-state"
     key                  = "ci.terraform.tfstate"
   }
