@@ -41,11 +41,10 @@ jobs:
     - name: Clone kata repository
       uses: actions/checkout@v3
       with:
-        repository: kata-containers/kata-containers
+        repository: surajssd/kata-containers
         path: kata-containers
         # TODO: Figure out what ref to use for kata-containers.
-        ref: main
-        # ref: CC-0.7.0
+        ref: CCv0-fix-mut
 
     - uses: actions-rs/toolchain@v1
       with:
