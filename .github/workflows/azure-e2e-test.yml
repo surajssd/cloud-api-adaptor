@@ -21,6 +21,10 @@ on:
     - main
     - kartikjoshi21/ci-upstream
 
+  pull_request_target:
+    branches:
+    - main
+
 jobs:
   build-podvm-image:
     runs-on: ubuntu-latest
