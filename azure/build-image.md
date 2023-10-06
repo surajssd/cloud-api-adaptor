@@ -76,6 +76,9 @@ The Pod-VM image can be built in three ways:
 
 - Create a custom Azure VM image based on Ubuntu 22.04 adding kata-agent, agent-protocol-forwarder and other dependencies for Cloud API Adaptor (CAA):
 
+> **Note**
+> Clone the `kata-containers` repository at the same level as `cloud-api-adaptor` repository. You can run the command `git clone https://github.com/kata-containers/kata-containers -b CCv0`.
+
 ```bash
 export PKR_VAR_resource_group="${AZURE_RESOURCE_GROUP}"
 export PKR_VAR_location="${AZURE_REGION}"
@@ -86,9 +89,6 @@ export PKR_VAR_az_gallery_image_name="${GALLERY_IMAGE_DEF_NAME}"
 export PKR_VAR_az_gallery_image_version="0.0.1"
 export PKR_VAR_offer=0001-com-ubuntu-confidential-vm-jammy
 export PKR_VAR_sku=22_04-lts-cvm
-
-export AA_KBC="cc_kbc_az_snp_vtpm"
-export CLOUD_PROVIDER=azure
 PODVM_DISTRO=ubuntu make image
 ```
 

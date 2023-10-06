@@ -5,6 +5,10 @@
 ROOT_DIR := $(dir $(lastword $(MAKEFILE_LIST)))../../
 include $(ROOT_DIR)podvm/Makefile.inc
 
+export AA_KBC ?= "cc_kbc_az_snp_vtpm"
+export LIBC ?= "gnu"
+export CLOUD_PROVIDER = "azure"
+
 .PHONY: image clean
 
 image: $(IMAGE_FILE)
